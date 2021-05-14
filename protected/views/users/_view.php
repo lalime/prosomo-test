@@ -17,8 +17,8 @@
 	<?php echo CHtml::encode($data->password); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('email')); ?>:</b>
-	<?php echo CHtml::encode($data->email); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('created_at')); ?>:</b>
+	<?php echo CHtml::encode($data->created_at); ?>
 	<br />
 
 

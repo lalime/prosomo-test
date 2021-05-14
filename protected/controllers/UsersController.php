@@ -1,6 +1,6 @@
 <?php
 
-class UserController extends Controller
+class UsersController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -70,6 +70,11 @@ class UserController extends Controller
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
+
+            // Hashing password before saving to database
+			$password=$_POST['User']['password'];
+			$model->password = md5($password);
+
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
