@@ -22,7 +22,6 @@
 
 <body>
 
-
     <div class="_container" id="page">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container -fluid">
@@ -35,13 +34,14 @@
                         'htmlOptions' => array('class' => 'navbar-nav'),
                         'itemCssClass' => 'nav-item',
                         'linkLabelWrapperHtmlOptions' => 'nav-link',
-                        'activeCssClass' => 'active',
+                        // 'activeCssClass' => 'active',
                         'items' => array(
                             array('label' => 'Home', 'linkOptions' => array('class' => 'nav-link', 'activeCssClass' => 'active'), 'url' => array('/site/index')),
-                            array('label' => 'About', 'linkOptions' => array('class' => 'nav-link'), 'url' => array('/site/page', 'view' => 'about')),
-                            array('label' => 'Contact', 'linkOptions' => array('class' => 'nav-link'), 'url' => array('/site/contact')),
-                            array('label' => 'Login', 'linkOptions' => array('class' => 'nav-link'), 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
-                            array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest)
+                            array('label' => 'About', 'linkOptions' => array('class' => 'nav-link', 'activeCssClass' => 'active'), 'url' => array('/site/page', 'view' => 'about')),
+                            array('label' => 'Contact', 'linkOptions' => array('class' => 'nav-link', 'activeCssClass' => 'active'), 'url' => array('/site/contact')),
+                            array('label' => 'Login', 'linkOptions' => array('class' => 'nav-link', 'activeCssClass' => 'active'), 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
+                            array('label' => 'Administrator', 'linkOptions' => array('class' => 'nav-link fw-bold'), 'url' => array('/users/index'), 'visible' => !Yii::app()->user->isGuest),
+                            array('label' => 'Logout (' . Yii::app()->user->name . ')', 'linkOptions' => array('class' => 'nav-link'), 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest)
                         ),
                     )); ?>
 
@@ -49,13 +49,18 @@
             </div>
         </nav>
 
-
-        <?php if (isset($this->breadcrumbs)) : ?>
-            <?php $this->widget('zii.widgets.CBreadcrumbs', array(
-                'links' => $this->breadcrumbs,
-            )); ?>
-            <!-- breadcrumbs -->
-        <?php endif ?>
+        <section class="bread-section">
+            <div class="container">
+                <nav aria-label="breadcrumb">
+                    <?php if (isset($this->breadcrumbs)) : ?>
+                        <?php $this->widget('zii.widgets.CBreadcrumbs', array(
+                            'links' => $this->breadcrumbs,
+                        )); ?>
+                        <!-- breadcrumbs -->
+                    <?php endif ?>
+                </nav>
+            </div>
+        </section><!-- footer -->
 
         <?php echo $content; ?>
 
