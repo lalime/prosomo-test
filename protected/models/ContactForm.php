@@ -7,10 +7,16 @@
  */
 class ContactForm extends CFormModel
 {
-	public $name;
+	public $first_name;
+	public $last_name;
 	public $email;
-	public $subject;
-	public $body;
+	public $phone_number;
+	public $city;
+	public $state;
+	public $zipcode;
+	public $country;
+	public $comment;
+	public $comment_2;
 	public $verifyCode;
 
 	/**
@@ -19,8 +25,10 @@ class ContactForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			// name, email, subject and body are required
-			array('name, email, subject, body', 'required'),
+			// name, last_name, email, phone_number, city, state, zipcode, country are required
+			array('first_name, last_name, email, phone_number, city, state, zipcode, country', 'required'),
+			// comments fields has to be safe
+            array('comment, comment_2', 'safe'),
 			// email has to be a valid email address
 			array('email', 'email'),
 			// verifyCode needs to be entered correctly
