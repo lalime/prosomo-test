@@ -52,20 +52,47 @@ class SiteController extends Controller
 	public function actionContact()
 	{
 		$model=new ContactForm;
+		$contact = new Contact;
+
 		if(isset($_POST['ContactForm']))
 		{
-			$model->attributes=$_POST['ContactForm'];
+			$model->attributes = $_POST['ContactForm'];
+            // Fill contact with values and save to DB
+            $contact->attributes = $_POST['ContactForm'];
+            $contact->save();
+            // die(var_dump($model->attributes, $_POST['ContactForm']));
+
 			if($model->validate())
 			{
-				$name='=?UTF-8?B?'.base64_encode($model->name).'?=';
-				$subject='=?UTF-8?B?'.base64_encode($model->subject).'?=';
+				$name='=?UTF-8?B?'.base64_encode($model->first_name .' '. $model->last_name).'?=';
+				$subject='=?UTF-8?B?'.base64_encode('New contact submitted').'?=';
 				$headers="From: $name <{$model->email}>\r\n".
 					"Reply-To: {$model->email}\r\n".
 					"MIME-Version: 1.0\r\n".
-					"Content-Type: text/plain; charset=UTF-8";
+					'Content-type: text/html; charset=iso-8859-1' . "\r\n". // Specify Content type HTML
+                    'X-Mailer: PHP/' . phpversion();
 
-				mail(Yii::app()->params['adminEmail'],$subject,$model->body,$headers);
+                // Compose a HTML email message with inputs
+                $message = '<html><body>';
+                $message .= '<h1 style="">Hi!</h1>';
+                $message .= '<b>First name : </b>'. $model->first_name .'<br/>';
+                $message .= '<b>Last name : </b>'. $model->last_name .'<br/>';
+                $message .= '<b>Last name : </b>'. $model->last_name .'<br/>';
+                $message .= '<b>Phone number : </b>'. $model->phone_number .'<br/>';
+                $message .= '<b>City : </b>'. $model->city .'<br/>';
+                $message .= '<b>State : </b>'. $model->state .'<br/>';
+                $message .= '<b>Zipcode : </b>'. $model->zipcode .'<br/>';
+                $message .= '<b>Country : </b>'. $model->country .'<br/>';
+
+                $message .= $model->comment ? '<b>Comment 1 : </b>'. $model->comment .'<br/>':'';
+                $message .= $model->comment_2 ? '<b>Comment 2 : </b>'. $model->comment_2 .'<br/>':'';
+
+                $message .= '</body></html>';
+                
+				mail(Yii::app()->params['adminEmail'],$subject,$message,$headers);
+
 				Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
+
 				$this->refresh();
 			}
 		}
