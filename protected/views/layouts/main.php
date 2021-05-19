@@ -40,7 +40,7 @@
                             array('label' => 'About', 'linkOptions' => array('class' => 'nav-link', 'activeCssClass' => 'active'), 'url' => array('/site/page', 'view' => 'about')),
                             array('label' => 'Contact', 'linkOptions' => array('class' => 'nav-link', 'activeCssClass' => 'active'), 'url' => array('/site/contact')),
                             array('label' => 'Login', 'linkOptions' => array('class' => 'nav-link', 'activeCssClass' => 'active'), 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
-                            array('label' => 'Administrator', 'linkOptions' => array('class' => 'nav-link fw-bold'), 'url' => array('/users/index'), 'visible' => !Yii::app()->user->isGuest),
+                            array('label' => 'Administrator', 'linkOptions' => array('class' => 'nav-link fw-bold'), 'url' => array('admin/contact/index'), 'visible' => !Yii::app()->user->isGuest),
                             array('label' => 'Logout (' . Yii::app()->user->name . ')', 'linkOptions' => array('class' => 'nav-link'), 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest)
                         ),
                     )); ?>

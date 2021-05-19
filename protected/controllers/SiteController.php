@@ -117,9 +117,15 @@ class SiteController extends Controller
 		if(isset($_POST['LoginForm']))
 		{
 			$model->attributes=$_POST['LoginForm'];
-			// validate user input and redirect to the previous page if valid
-			if($model->validate() && $model->login())
+
+            // validate user input and redirect to the previous page if valid
+			if($model->validate() && $model->login()) {
+
+                // Write log for user login action in errors.log
+                Yii::log(' >>> ['. Yii::app()->user->id .'] Login', 'info', 'application');
+
 				$this->redirect(Yii::app()->user->returnUrl);
+            }
 		}
 		// display the login form
 		$this->render('login',array('model'=>$model));
@@ -130,6 +136,9 @@ class SiteController extends Controller
 	 */
 	public function actionLogout()
 	{
+        // Write log for user logout action
+        Yii::log(' >>> ['. Yii::app()->user->id .'] Logout', 'info', 'application');
+
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
