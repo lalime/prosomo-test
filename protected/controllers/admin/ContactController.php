@@ -49,76 +49,87 @@ class ContactController extends Controller
             // collects user input data      
             $csv_file = $_FILES['csv_file'];
             
-            // validates user input and redirect to previous page if validated
-            if (isset($csv_file['tmp_name']) && !empty($csv_file['tmp_name'])) {
+            // Make sure if file temporary name is set
+            if (!isset($csv_file['tmp_name']) && empty($csv_file['tmp_name'])) {
+                Yii::app()->user->setFlash('success', "File import error  !");
 
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $mime = finfo_file($finfo, $csv_file['tmp_name']);
-                $tmpName = $csv_file['tmp_name'];
-                $csv = [];
-                finfo_close($finfo);
+                $this->redirect(array('admin/contact/index'));
+            }
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $csv_file['tmp_name']);
+            $tmpName = $csv_file['tmp_name'];
+            $csv = [];
+            finfo_close($finfo);
+
+            $allowed_mime = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
+
+            // Verify if file mime type correspond to one in the array
+            if (!in_array($mime, $allowed_mime) || !is_uploaded_file($csv_file['tmp_name'])) {
+                Yii::app()->user->setFlash('success', "Invalid file type! Must be of type CSV !");
+
+                $this->redirect(array('admin/contact/index'));
+            }
+            
+            if (($handle = fopen($tmpName, 'r')) !== FALSE) {
+                // necessary if a large csv file
+                set_time_limit(0);
     
-                $allowed_mime = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
-
-                if (in_array($mime, $allowed_mime) && is_uploaded_file($csv_file['tmp_name'])) {
+                $row = 0;
     
-                    if(($handle = fopen($tmpName, 'r')) !== FALSE) {
-                        // necessary if a large csv file
-                        set_time_limit(0);
-            
-                        $row = 0;
-            
-                        while(($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
-                            // number of fields in the csv
-                            $col_count = count($data);
+                while(($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+                    // number of fields in the csv
+                    // $col_count = count($data);
 
-                            if (empty($data[1]) || empty($data[2]) || empty($data[3]) || empty($data[4]) || empty($data[5]) || empty($data[6]) || empty($data[7]) || empty($data[8]) || empty($data[9]) ) {
-                                
-                                // inc the row
-                                $row++;
+                    // !$row is used to ignore the first line
+                    if (!$row || empty($data[0]) || empty($data[1]) || empty($data[2]) || empty($data[3]) 
+                        || empty($data[4]) || empty($data[5]) || empty($data[6]) || empty($data[7])
+                    ) {
+                        // inc the row
+                        $row++;
 
-                                continue;
-                            }
-            
-                            // get the values from the csv
-                            // $csv['id'] = $data[0];
-                            $csv['first_name'] = $data[1];
-                            $csv['last_name'] = $data[2];
-                            $csv['email'] = $data[3];
-                            $csv['phone_number'] = $data[4];
-                            $csv['city'] = $data[5];
-                            $csv['state'] = $data[6];
-                            $csv['zipcode'] = $data[7];
-                            $csv['country'] = $data[8];
-                            $csv['comment'] = $data[9];
-                            $csv['comment_2'] = $data[10];
-                            // $csv['created_at'] = $data[11];
-                            // var_dump($csv);
-            
-                            $contact = new Contact;
+                        if ($row > 0)
+                            Yii::log(' >>> [ Ligne #'. ($row + 1) .'] Missing infos', 'info', 'application');
 
-                            // Fill contact with values and save to DB
-                            if ($contact->exists("email='$data[3]'")) {
-                                $model= Contact::model()->findByAttributes(array('email' => $data[3]));
-                                
-                                $model->attributes = $csv;
-                                $model->save();
-                            } else {
-                                $contact->attributes = $csv;
-                                $contact->save();
-                            }
-
-                            // inc the row
-                            $row++;
-                        }
-                        fclose($handle);
+                        continue;
                     }
     
-                    // echo '<pre>';
-                    // var_dump($col_count, $data);
-                    // echo '<pre>';
-                    // die;
+                    // get the values from the csv
+                    $csv['first_name'] = $data[0];
+                    $csv['last_name'] = $data[1];
+                    $csv['email'] = $data[2];
+                    $csv['phone_number'] = $data[3];
+                    $csv['city'] = $data[4];
+                    $csv['state'] = $data[5];
+                    $csv['zipcode'] = $data[6];
+                    $csv['country'] = $data[7];
+                    $csv['comment'] = $data[8];
+                    $csv['comment_2'] = $data[9];
+    
+                    $contact = new Contact;
+
+                    // Fill contact with values and save to DB
+                    try {
+                        if ($contact->exists("email='$data[2]'")) {
+                            $model= Contact::model()->findByAttributes(array('email' => $data[2]));
+                        
+                            $model->attributes = $csv;
+                            $model->save();
+                        } else {
+                            $contact->attributes = $csv;
+                            $contact->save();
+                        }
+                    }
+                    catch(CDbException $e) { // Catch database Exception
+                        Yii::log(' >>> [ Ligne #'. ($row + 1) .'] Erreur : '. $e->getMessage() , 'error', 'application');
+                    }
+                    catch (Exception $e) {
+                        Yii::log(' >>> [ Ligne #'. ($row + 1) .'] Erreur : '. $e->getMessage(), 'error', 'application');
+                    }
+
+                    // inc the row
+                    $row++;
                 }
+                fclose($handle);
             }
         }
         // displays the login form
