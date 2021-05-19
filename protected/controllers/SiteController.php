@@ -91,6 +91,9 @@ class SiteController extends Controller
                 
 				mail(Yii::app()->params['adminEmail'],$subject,$message,$headers);
 
+                // Write log for user login action in errors.log
+                Yii::log(' >>> ['. $model->first_name .' '. $model->last_name .' - '. $model->email .'] Message Submitted', 'info', 'application');
+
 				Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
 
 				$this->refresh();
