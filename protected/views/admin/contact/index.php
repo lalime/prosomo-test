@@ -28,8 +28,9 @@ Yii::app()->clientScript->registerScript('search', "
         });
         return false;
     });
+
     $('#delete_selected_items_button').on('click', function () {
-        var selected = $('#contacts-grid').selGridView('getAllSelection');
+        var selected = $.fn.yiiGridView.getSelection('contacts-grid')
     
         // if nothing's selected
         if ( ! selected.length)
@@ -41,16 +42,13 @@ Yii::app()->clientScript->registerScript('search', "
         //confirmed?
         if ( ! confirm('Are you sure to delete ' + selected.length + ' contacts?')) return false;
     
-        var multipledeleteUrl = '$baseUrl/index.php?r=admin/contacts/bulkdelete';
+        var multipledeleteUrl = '$baseUrl/index.php?r=admin/contact/bulkdelete';
     
         $.ajax({
             type: 'POST',
             url: multipledeleteUrl,
-            data: {selectedUsers : selected},
+            data: {selectedContacts : selected},
             success: (function (e){
-    
-                //just to make sure we delete the last selected items
-                $('#contacts-grid').selGridView('clearAllSelection');
     
                 //we refresh the CCGridView after success deletion
                 $.fn.yiiGridView.update('contacts-grid');
@@ -93,6 +91,9 @@ Yii::app()->clientScript->registerScript('search', "
                 <div class="col-4 d-flex justify-content-end">
                     <button type="button" class="btn btn-success upload-button" type="button" data-bs-toggle="modal" data-bs-target="#uploadModal">Upload</button>
                 </div>
+            </div>
+            <div>
+                <button type="button" id="delete_selected_items_button" class="btn btn-danger">Delete selected items</button>
             </div>
 <?php
 
@@ -166,11 +167,11 @@ Yii::app()->clientScript->registerScript('search', "
                 ),
                 array(
                     'name'=>'city',
-                    'filter' => ['Justusfort' => 'Justusfort'],
+                    'filter' => CHtml::listData(Contact::model()->findAll(), 'city','city'),
                 ),
                 array(
                     'name'=>'state',
-                    'filter' => ['On' => 'On'],
+                    'filter' => CHtml::listData(Contact::model()->findAll(), 'state','state'),
                 ),
                 array(
                     'name'=>'zipcode',
@@ -179,7 +180,7 @@ Yii::app()->clientScript->registerScript('search', "
                 ),
                 array(
                     'name'=>'country',
-                    'filter' => [],
+                    'filter' => CHtml::listData(Contact::model()->findAll(), 'country','country'),
                 ),
                 array(
                     'name'=>'comment_2',
@@ -221,7 +222,7 @@ Yii::app()->clientScript->registerScript('search', "
     );
 
     ?>
-                
+
 
             <div class="modal" tabindex="-1" id="myModal">
                 <div class="modal-dialog">

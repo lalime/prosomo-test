@@ -27,8 +27,8 @@ class ContactController extends Controller
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=> array('admin'),
+				'actions'=>array('admin', 'delete', 'bulkdelete'),
+				'users'=> array('admin1', 'admin2'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -49,10 +49,6 @@ class ContactController extends Controller
             'criteria'=>array(
                 'order'=>'created_at DESC',
             ),
-            // 'countCriteria'=>array(
-            //     'condition'=>'status=1',
-            //     // 'order' and 'with' clauses have no meaning for the count query
-            // ),
             'pagination'=>array(
                 'pageSize'=>20,
             ),
@@ -189,6 +185,14 @@ class ContactController extends Controller
         $this->redirect(array('admin/contact/index'));
     }
 
+
+    /**
+     * Delete multiple contacts rows in the database.
+     * If it is not an ajax request, nothing is done.
+     * @param integer $id the ID of the model to be loaded
+     * @return User the loaded model
+     * @throws CHttpException
+     */
 	public function actionBulkDelete()
 	{
 		if (Yii::app()->request->isAjaxRequest)
