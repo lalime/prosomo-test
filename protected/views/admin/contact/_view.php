@@ -27,14 +27,14 @@
     <td><?php echo CHtml::encode($data->state); ?></td>
     <td><?php echo CHtml::encode($data->country); ?></td>
     <td>
-        <div class="accordion" id="accordionExample">
+        <div class="accordion" id="accordionComment<?php echo $data->id; ?>">
             <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <h2 class="accordion-header" id="heading<?php echo $data->id; ?>">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?php echo $data->id; ?>" aria-expanded="true" aria-controls="collapse<?php echo $data->id; ?>">
 
                     </button>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div id="collapse<?php echo $data->id; ?>" class="accordion-collapse collapse" aria-labelledby="heading<?php echo $data->id; ?>" data-bs-parent="#accordionComment<?php echo $data->id; ?>">
                     <div class="accordion-body">
                         Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Nulla quis lorem ut libero malesuada feugiat. Vivamus suscipit tortor eget felis porttitor volutpat. Sed porttitor lectus nibh.
                         <?php echo CHtml::encode($data->comment_2); ?>

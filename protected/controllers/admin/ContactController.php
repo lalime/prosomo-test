@@ -36,6 +36,57 @@ class ContactController extends Controller
 		);
 	}
 
+    public function actionIndex()
+    {
+		$model=new Contact('search');
+		$model->unsetAttributes();  // clear any default values
+
+		if (isset($_GET['Contact'])) {
+			$model->attributes=$_GET['Contact'];
+        }
+
+        $dataProvider = new CActiveDataProvider('Contact',  array(
+            'criteria'=>array(
+                'order'=>'created_at DESC',
+            ),
+            // 'countCriteria'=>array(
+            //     'condition'=>'status=1',
+            //     // 'order' and 'with' clauses have no meaning for the count query
+            // ),
+            'pagination'=>array(
+                'pageSize'=>20,
+            ),
+        ));
+
+        $this->render('index', array(
+            'dataProvider' => $dataProvider,
+            'model' => $model,
+        ));
+    }
+
+    public function actionView()
+    {
+        $this->render('view', array(
+            'model' => $this->loadModel($id),
+        ));
+    }
+
+    /**
+     * Returns the data model based on the primary key given in the GET variable.
+     * If the data model is not found, an HTTP exception will be raised.
+     * @param integer $id the ID of the model to be loaded
+     * @return User the loaded model
+     * @throws CHttpException
+     */
+    public function loadModel($id)
+    {
+        $model = Contact::model()->findByPk($id);
+
+        if ($model === null)
+            throw new CHttpException(404, 'The requested page does not exist.');
+        return $model;
+    }
+
     /**
      * Specifies the access control rules.
      * This method is used by the 'accessControl' filter.
@@ -131,63 +182,26 @@ class ContactController extends Controller
                 }
                 fclose($handle);
             }
-        }
+        } 
         // displays the login form
         Yii::app()->user->setFlash('success', "Data imported successfully!");
 
         $this->redirect(array('admin/contact/index'));
     }
 
-    public function actionIndex()
-    {
-		$model=new Contact('search');
-		$model->unsetAttributes();  // clear any default values
+	public function actionBulkDelete()
+	{
+		if (Yii::app()->request->isAjaxRequest)
+        {
+            $selectedContacts = Yii::app()->request->getPost('selectedContacts');
 
-		if (isset($_GET['Contact'])) {
-			$model->attributes=$_GET['Contact'];
+            //iterate through all ids
+            foreach ($selectedContacts as $id)
+            {
+                $this->loadModel($id)->delete();
+            }
         }
-
-        $dataProvider = new CActiveDataProvider('Contact',  array(
-            'criteria'=>array(
-                'order'=>'created_at DESC',
-            ),
-            // 'countCriteria'=>array(
-            //     'condition'=>'status=1',
-            //     // 'order' and 'with' clauses have no meaning for the count query
-            // ),
-            'pagination'=>array(
-                'pageSize'=>20,
-            ),
-        ));
-
-        $this->render('index', array(
-            'dataProvider' => $dataProvider,
-            'model' => $model,
-        ));
-    }
-
-    public function actionView()
-    {
-        $this->render('view', array(
-            'model' => $this->loadModel($id),
-        ));
-    }
-
-    /**
-     * Returns the data model based on the primary key given in the GET variable.
-     * If the data model is not found, an HTTP exception will be raised.
-     * @param integer $id the ID of the model to be loaded
-     * @return User the loaded model
-     * @throws CHttpException
-     */
-    public function loadModel($id)
-    {
-        $model = Contact::model()->findByPk($id);
-
-        if ($model === null)
-            throw new CHttpException(404, 'The requested page does not exist.');
-        return $model;
-    }
+	}
 
     // Uncomment the following methods and override them if needed
     /*

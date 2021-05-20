@@ -40,7 +40,7 @@ class Contact extends CActiveRecord
 			array('comment, comment_2, created_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('first_name, last_name, email, phone_number, city, state, zipcode, country', 'safe', 'on'=>'search'),
+			array('first_name, last_name, email', 'safe', 'on'=>'search'),
 		);
 	}
 

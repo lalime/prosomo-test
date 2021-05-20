@@ -12,9 +12,9 @@ $this->breadcrumbs = array(
 <div class="container h-75" id="page">
     <section class="my-5">
         <div class="form w-50 p-3 m-auto">
-        <h1>Login</h1>
+            <h1>Login</h1>
 
-        <p>Please fill out the following form with your login credentials:</p>
+            <p>Please fill out the following form with your login credentials:</p>
 
             <?php $form = $this->beginWidget('CActiveForm', array(
                 'id' => 'login-form',
@@ -52,7 +52,7 @@ $this->breadcrumbs = array(
                 <label for="colFormLabelLg" class="col-sm-3 col-form-label col-form-label-lg">&nbsp;</label>
                 <div class="col-sm-9 form-check">
                     <?php echo $form->checkBox($model, 'rememberMe', ['class' => ' pl-2 form-check-input']); ?>
-                    <?php echo $form->label($model, 'rememberMe', ['class' => 'form-check-label'] ); ?>
+                    <?php echo $form->label($model, 'rememberMe', ['class' => 'form-check-label']); ?>
                     <?php echo $form->error($model, 'rememberMe'); ?>
                 </div>
             </div>
