@@ -59,6 +59,20 @@ Yii::app()->clientScript->registerScript('search', "
             })
         });
     })
+
+    var myModal = new bootstrap.Modal(document.getElementById('myModal'), {
+        keyboard: false
+    })
+
+    contactRows = document.querySelectorAll('tr > td > .accordion');
+    for (let i = 0; i < contactRows.length; i++) {
+        contactRows[i].addEventListener('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+    
+            myModal.hide()
+        })
+    }
 ");
 
 // echo CHtml::scriptFile(Yii::app()->request->baseUrl . '/js/app.js');
@@ -96,56 +110,6 @@ Yii::app()->clientScript->registerScript('search', "
                 <button type="button" id="delete_selected_items_button" class="btn btn-danger">Delete selected items</button>
             </div>
 <?php
-
-    $pre_html = '<table class="table table-striped contact-list caption-top">
-                <caption>List of messages</caption>
-                <thead>
-                    <th scope="col">
-                    
-                    </th>
-                    <th scope="col">First Name</th>
-                    <th scope="col">Last Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone Number</th>
-                    <th scope="col">Zipcode</th>
-                    <th scope="col">City</th>
-                    <th scope="col">State</th>
-                    <th scope="col">Country</th>
-                    <th scope="col">Comment 2</th>
-                    <th scope="col">Sent On</th>
-                </thead>
-                <tbody>';
-
-    $post_html = '</tbody>
-        <tfoot>
-            <tr>
-                <td></td>
-                <td colspan="10" class="align-right">
-                    <a href="#" id="delete_selected_items_button" class="link-danger">Supprimer la selection</a>
-                </td>
-            </tr>
-        </tfoot>
-    </table>';
-
-
-    // $this->widget('zii.widgets.CListView', array(
-    //     'id' => 'contact-list',
-    //     'dataProvider' => $model->search(),
-    //     'itemView' => '_view',
-    //     // 'filter' => $model,
-    //     'htmlOptions' => array(
-    //         'preItemsTag' => $pre_html,
-    //         'postItemsTag' => $post_html,
-    //     ),
-    //     'enablePagination' => true,
-    //     'sortableAttributes' => array(
-    //         'first_name',
-    //         'last_name',
-    //         'city',
-    //         'state',
-    //         'country'
-    //     ),
-    // ));
     $this->widget('zii.widgets.grid.CGridView', array
         (
             'id' => 'contacts-grid',
