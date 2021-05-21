@@ -8,7 +8,7 @@
 This project is a simple yii Test.
 	
 ## Technologies
-*  Yii 1.1 (PHP) yii-1.1.23.445827
+*  Yii 1.1 (PHP)
 *  MySQL
 *  Bootstrap 5
 *  JavaScript (AJAX)
