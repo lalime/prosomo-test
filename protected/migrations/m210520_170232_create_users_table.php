@@ -11,12 +11,22 @@ class m210520_170232_create_users_table extends CDbMigration
                 'created_at' => 'datetime DEFAULT CURRENT_TIMESTAMP',
             )
         );
+
+        $this->insert('users', [
+            'username' => 'admin1',
+            'password' => md5('admin11')
+        ]);
+
+        $this->insert('users', [
+            'username' => 'admin2',
+            'password' => md5('admin22')
+        ]);
 	}
 
 	public function down()
 	{
         $this->dropTable('contacts');
-		echo "m210520_170232_create_users_table does not support migration down.\n";
+        
 		return false;
 	}
 
