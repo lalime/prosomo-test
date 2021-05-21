@@ -8,7 +8,7 @@
 This project is a simple yii Test.
 	
 ## Technologies
-*  Yii 1.1 (PHP)
+*  Yii 1.1 (PHP) yii-1.1.23.445827
 *  MySQL
 *  Bootstrap 5
 *  JavaScript (AJAX)
@@ -18,7 +18,9 @@ This project is a simple yii Test.
 ## Setup
 To run this project, install it locally by cloning or downloading sources then :
 
-1. Open a terminal then move to the project directory and type :
+1. Unzip yii.zip archive to your server .
+2. Copy project directory prosomo-test (default name) into that folder.
+1. Open a terminal, navigate to prosomo-test root directory and type :
 
 ```
 $ cd protected/
