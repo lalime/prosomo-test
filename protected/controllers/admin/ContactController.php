@@ -154,12 +154,20 @@ class ContactController extends Controller
     
                     $contact = new Contact;
 
+                    if (!$contact->validate($csv)) {
+                        Yii::log(' >>> [ Ligne #'. ($row + 1) .'] Invalid datas', 'info', 'application');
+
+                        continue;
+                    }
+
                     // Fill contact with values and save to DB
                     try {
+                        
                         if ($contact->exists("email='$data[2]'")) {
                             $model= Contact::model()->findByAttributes(array('email' => $data[2]));
                         
                             $model->attributes = $csv;
+                            
                             $model->save();
                         } else {
                             $contact->attributes = $csv;
