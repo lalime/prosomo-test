@@ -64,15 +64,36 @@ Yii::app()->clientScript->registerScript('search', "
         keyboard: false
     })
 
-    contactRows = document.querySelectorAll('tr > td > .accordion');
-    for (let i = 0; i < contactRows.length; i++) {
-        contactRows[i].addEventListener('click', function(e) {
-            e.stopPropagation();
-            e.preventDefault();
+    $('tr > td > .accordion').click(function(e){
+        e.stopPropagation();
+        e.preventDefault();
+
+        myModal.hide()
+        
+        var contactId = $(this).data('rowid');
+        var commentLogUrl = '$baseUrl/index.php?r=admin/contact/commentviewed';
     
-            myModal.hide()
-        })
-    }
+        $.ajax({
+            type: 'POST',
+            url: commentLogUrl,
+            data: {contactId : contactId},
+            success: (function (e){
+                console.log('done');
+            }),
+            error: (function (e) {
+                console.log('Can not log viewed contact');
+            })
+        });
+    });
+    // contactRows = document.querySelectorAll('tr > td > .accordion');
+    // for (let i = 0; i < contactRows.length; i++) {
+    //     contactRows[i].addEventListener('click', function(e) {
+    //         e.stopPropagation();
+    //         e.preventDefault();
+    
+    //         myModal.hide()
+    //     })
+    // }
 ");
 
 // echo CHtml::scriptFile(Yii::app()->request->baseUrl . '/js/app.js');
@@ -153,7 +174,7 @@ Yii::app()->clientScript->registerScript('search', "
                     'sortable' => false,
                     'value' => function($data,$row) {
                         // also allows us to use outside (external) variables, that are not defined within grid,
-                        return '<div class="accordion" id="accordionComment'. $data->id .'">
+                        return '<div class="accordion" id="accordionComment'. $data->id .'" data-rowid="'. $data->id .'">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="heading'. $data->id .'">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse'. $data->id .'" aria-expanded="true" aria-controls="collapse'. $data->id .'">

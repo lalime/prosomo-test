@@ -23,7 +23,7 @@ class ContactController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','view','admin', 'import'),
+				'actions'=>array('index','view','admin', 'import', 'commentviewed'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -193,7 +193,6 @@ class ContactController extends Controller
         $this->redirect(array('admin/contact/index'));
     }
 
-
     /**
      * Delete multiple contacts rows in the database.
      * If it is not an ajax request, nothing is done.
@@ -212,6 +211,22 @@ class ContactController extends Controller
             {
                 $this->loadModel($id)->delete();
             }
+        }
+	}
+
+    /**
+     * Delete multiple contacts rows in the database.
+     * If it is not an ajax request, nothing is done.
+     * @param integer $id the ID of the model to be loaded
+     * @return User the loaded model
+     * @throws CHttpException
+     */
+	public function actionCommentViewed()
+	{
+		if (Yii::app()->request->isAjaxRequest)
+        {
+            $contactId = Yii::app()->request->getPost('contactId');
+            Yii::log(' >>> [ '. Yii::app()->user->id .' ]  viewed comment_2 on record ID #'. $contactId .' ', 'info', 'application');
         }
 	}
 
