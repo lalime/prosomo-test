@@ -37,8 +37,9 @@ class Contact extends CActiveRecord
 		return array(
 			array('first_name, last_name, email, phone_number, city, state, zipcode, country', 'required'),
 			array('first_name, last_name, email, phone_number, city, state, zipcode, country', 'length', 'max'=>255),
+			array('email', 'email'),
 			array('comment, comment_2, created_at', 'safe'),
-            array('phone_number', 'match', 'pattern'=>'/^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/', 'message'=>'Your phone_number is invalid!'),
+            array('phone_number', 'match', 'pattern'=>'/^(\([0-9]{3}\)|[0-9]{3}-)[0-9]{3}-[0-9]{4}$/', 'message'=>'Your phone_number is invalid!'),
             array('zipcode', 'match', 'pattern'=> '/^[ABCEGHJKLMNPRSTVXY]{1}\d{1}[A-Z]{1} *\d{1}[A-Z]{1}\d{1}$/', 'message'=>'your zipcode is invalid!'),
 
 			// The following rule is used by search().

@@ -139,7 +139,7 @@ class ContactController extends Controller
 
                         continue;
                     }
-    
+                    
                     // get the values from the csv
                     $csv['first_name'] = $data[0];
                     $csv['last_name'] = $data[1];
@@ -159,12 +159,12 @@ class ContactController extends Controller
 
                         continue;
                     }
-
+                    
                     // Fill contact with values and save to DB
                     try {
+                        $model= Contact::model()->findByAttributes(array('email' => $data[2]));
                         
-                        if ($contact->exists("email='$data[2]'")) {
-                            $model= Contact::model()->findByAttributes(array('email' => $data[2]));
+                        if ($model) {
                         
                             $model->attributes = $csv;
                             
@@ -189,7 +189,7 @@ class ContactController extends Controller
         } 
         // displays the login form
         Yii::app()->user->setFlash('success', "Data imported successfully!");
-
+        
         $this->redirect(array('admin/contact/index'));
     }
 

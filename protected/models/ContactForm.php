@@ -31,7 +31,7 @@ class ContactForm extends CFormModel
             array('comment, comment_2', 'safe'),
 			// email has to be a valid email address
 			array('email', 'email'),
-            array('phone_number', 'match', 'pattern'=>'/^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/', 'message'=>'Your phone_number is invalid!'),
+            array('phone_number', 'match', 'pattern'=>'/^(\([0-9]{3}\)|[0-9]{3}-)[0-9]{3}-[0-9]{4}$/', 'message'=>'Your phone_number is invalid!'),
             array('zipcode', 'match', 'pattern'=> '/^[ABCEGHJKLMNPRSTVXY]{1}\d{1}[A-Z]{1} *\d{1}[A-Z]{1}\d{1}$/', 'message'=>'your zipcode is invalid!'),
 			// verifyCode needs to be entered correctly
 			array('verifyCode', 'captcha', 'allowEmpty'=>!CCaptcha::checkRequirements()),
